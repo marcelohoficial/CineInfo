@@ -89,6 +89,32 @@ fun MovieDetailScreen() {
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
+
+
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Infos curtas
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("2000", color = Color.LightGray, fontSize = 14.sp)
+                Spacer(Modifier.width(8.dp))
+                Text("HD", color = Color.White, fontSize = 12.sp,
+                    modifier = Modifier
+                        .background(Color.DarkGray, RoundedCornerShape(4.dp))
+                        .padding(horizontal = 4.dp, vertical = 2.dp))
+                Spacer(Modifier.width(8.dp))
+                Text("1h 44m", color = Color.LightGray, fontSize = 14.sp)
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = "⭐ 9.5/10",
+                    fontSize = 16.sp,
+                    color = Color(0xFFFFD700),
+                    fontWeight = FontWeight.SemiBold
+                )
+
+            }
         }
     }
 }
