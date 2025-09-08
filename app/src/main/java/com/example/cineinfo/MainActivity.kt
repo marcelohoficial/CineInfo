@@ -43,28 +43,52 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MovieDetailScreen() {
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFF262A35)) // fundo neutro
     ) {
-        // Poster de fundo
-        Image(
-            painter = painterResource(id = R.drawable.poster_exemplo),
-            contentDescription = "Poster",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-
-        // Gradiente escuro para legibilidade
+        // Parte de cima (imagem com gradiente leve)
         Box(
             modifier = Modifier
-                .matchParentSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color.Black),
-                        startY = 300f
+                .fillMaxWidth()
+                .fillMaxHeight(0.5f) // metade da tela
+        ) {
+            // Poster
+            Image(
+                painter = painterResource(id = R.drawable.poster_exemplo),
+                contentDescription = "Poster do filme",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.matchParentSize()
+            )
+
+            // Gradiente suave para o corte da imagem
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color.Transparent, Color(0xFF262A35)),
+                            startY = 200f
+                        )
                     )
-                )
-        )
+            )
+        }
+
+        // Parte de baixo (conteúdo)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top
+        ) {
+            // Título
+            Text(
+                text = "O Auto da Compadecida",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
     }
 }
