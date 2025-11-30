@@ -11,16 +11,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.cineinfo.data.Movie
+import coil.compose.AsyncImage
+import com.example.cineinfo.data.local.MovieEntity
 
 @Composable
 fun MoviePoster(
-    movie: Movie,
-    onMovieClick: (Movie) -> Unit,
+    movie: MovieEntity,
+    onMovieClick: (MovieEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -29,8 +29,8 @@ fun MoviePoster(
             .width(140.dp)
             .clickable { onMovieClick(movie) }
     ) {
-        androidx.compose.foundation.Image(
-            painter = painterResource(id = movie.posterResId),
+        AsyncImage(
+            model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
             contentDescription = movie.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -53,8 +53,8 @@ fun MoviePoster(
 @Composable
 fun MovieSection(
     title: String,
-    movies: List<Movie>,
-    onMovieClick: (Movie) -> Unit,
+    movies: List<MovieEntity>,
+    onMovieClick: (MovieEntity) -> Unit,
     onSeeAllClick: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
