@@ -17,6 +17,15 @@ import com.example.cineinfo.data.repository.MovieRepository
 import com.example.cineinfo.ui.movies.MoviesViewModel
 import com.example.cineinfo.navigation.AppNavigationGraph
 import com.example.cineinfo.ui.theme.CineInfoTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Alignment
+import androidx.compose.material3.CircularProgressIndicator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +46,24 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
+                    var isLoading by remember { mutableStateOf(true) }
 
-                    AppNavigationGraph(navController = navController, viewModel = vm)
+                    LaunchedEffect(Unit) {
+                        delay(2000)
+                        isLoading = false
+                    }
+
+                    if (isLoading) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    } else {
+                        val navController = rememberNavController()
+                        AppNavigationGraph(navController = navController, viewModel = vm)
+                    }
                 }
             }
         }
