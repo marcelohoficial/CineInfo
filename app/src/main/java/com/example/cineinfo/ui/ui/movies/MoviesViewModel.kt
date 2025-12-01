@@ -56,6 +56,10 @@ class MoviesViewModel(private val repo: MovieRepository) : ViewModel() {
         }
     }
 
+    fun getMovieById(id: Int): MovieEntity? {
+        return ui.value.movies.find { it.id == id } ?: ui.value.searchResults.find { it.id == id }
+    }
+
     class Factory(private val repo: MovieRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")

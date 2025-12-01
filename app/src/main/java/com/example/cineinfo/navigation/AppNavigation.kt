@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.cineinfo.ui.movies.MoviesViewModel
 import com.example.cineinfo.ui.screens.HomeScreen
-import com.example.cineinfo.ui.screens.MovieDetailScreen // Ensure this import is correct or fix it if it's in theme.screens
+import com.example.cineinfo.ui.screens.MovieDetailScreen
 import com.example.cineinfo.ui.screens.ProfileScreen
 import com.example.cineinfo.ui.screens.SearchScreen
 
@@ -39,9 +39,7 @@ fun AppNavigationGraph(navController: NavHostController, viewModel: MoviesViewMo
         ) { backStackEntry ->
             val movieId = backStackEntry.arguments?.getInt("movieId")
 
-            // Note: MovieDetailScreen might need update to fetch from VM or API
-            // For now assuming it takes movieId
-            MovieDetailScreen(movieId = movieId, navController = navController)
+            MovieDetailScreen(movieId = movieId, navController = navController, viewModel = viewModel)
         }
 
         composable(route = AppDestinations.PROFILE) {

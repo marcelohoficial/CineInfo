@@ -22,16 +22,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.cineinfo.R
-import com.example.cineinfo.data.Movie
-import com.example.cineinfo.data.getMockMovies
+import com.example.cineinfo.data.local.MovieEntity
 import com.example.cineinfo.navigation.AppDestinations
 import com.example.cineinfo.ui.components.AppBottomNavigationBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavController) {
-    val mockMovies = remember { getMockMovies() }
+    // TODO: Fetch favorite movies from ViewModel/Database
+    val favoriteMovies = remember { emptyList<MovieEntity>() }
 
     Scaffold(
         topBar = {
@@ -116,15 +117,21 @@ fun ProfileScreen(navController: NavController) {
                 }
             }
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(mockMovies) { movie ->
-                    MoviePosterItem(movie = movie, navController = navController)
+            if (favoriteMovies.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Nenhum favorito ainda.", color = Color.Gray)
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(favoriteMovies) { movie ->
+                        MoviePosterItem(movie = movie, navController = navController)
+                    }
                 }
             }
         }
@@ -132,7 +139,7 @@ fun ProfileScreen(navController: NavController) {
 }
 
 @Composable
-fun MoviePosterItem(movie: Movie, navController: NavController) {
+fun MoviePosterItem(movie: MovieEntity, navController: NavController) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
@@ -143,8 +150,8 @@ fun MoviePosterItem(movie: Movie, navController: NavController) {
             },
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
-        Image(
-            painter = painterResource(id = movie.posterResId),
+        AsyncImage(
+            model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
             contentDescription = movie.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()

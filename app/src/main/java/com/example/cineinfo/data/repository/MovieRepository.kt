@@ -15,6 +15,9 @@ class MovieRepository(
     val moviesFlow: Flow<List<MovieEntity>> = dao.getAll()
 
     suspend fun refreshFromNetwork() {
+        if (apiKey.isBlank()) {
+            throw Exception("API Key is missing. Check local.properties.")
+        }
         withContext(Dispatchers.IO) {
             val resp = api.getPopular(apiKey)
             val entities = resp.results.map {
@@ -23,7 +26,8 @@ class MovieRepository(
                     title = it.title,
                     overview = it.overview,
                     voteAverage = it.vote_average,
-                    posterPath = it.poster_path
+                    posterPath = it.poster_path,
+                    releaseDate = it.release_date
                 )
             }
             dao.insertAll(entities)
@@ -31,6 +35,9 @@ class MovieRepository(
     }
 
     suspend fun searchMovies(query: String): List<MovieEntity> {
+        if (apiKey.isBlank()) {
+            throw Exception("API Key is missing. Check local.properties.")
+        }
         return withContext(Dispatchers.IO) {
             val resp = api.searchMovie(apiKey, query)
             resp.results.map {
@@ -39,7 +46,8 @@ class MovieRepository(
                     title = it.title,
                     overview = it.overview,
                     voteAverage = it.vote_average,
-                    posterPath = it.poster_path
+                    posterPath = it.poster_path,
+                    releaseDate = it.release_date
                 )
             }
         }

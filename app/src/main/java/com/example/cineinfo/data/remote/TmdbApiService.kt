@@ -8,7 +8,8 @@ data class TmdbMovieDto(
     val title: String,
     val overview: String,
     val vote_average: Double,
-    val poster_path: String?
+    val poster_path: String?,
+    val release_date: String?
 )
 
 data class PopularResponse(val results: List<TmdbMovieDto>)

@@ -52,10 +52,13 @@ fun SearchScreen(
                 placeholder = { Text("Procurar filmes...") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color(0xFF2D2B3F),
-                    textColor = Color.White,
-                    placeholderColor = Color.Gray,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0xFF2D2B3F),
+                    unfocusedContainerColor = Color(0xFF2D2B3F),
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    focusedPlaceholderColor = Color.Gray,
+                    unfocusedPlaceholderColor = Color.Gray,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),

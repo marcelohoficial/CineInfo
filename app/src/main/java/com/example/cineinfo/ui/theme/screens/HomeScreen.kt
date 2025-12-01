@@ -58,6 +58,18 @@ fun HomeScreen(navController: NavController, viewModel: MoviesViewModel) {
                 .background(Color(0xFF1E1C2E))
                 .verticalScroll(rememberScrollState())
         ) {
+            if (state.error != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Red.copy(alpha = 0.8f))
+                        .padding(8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "Erro: ${state.error}", color = Color.White)
+                }
+            }
+
             // Header
             Row(
                 modifier = Modifier

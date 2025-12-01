@@ -1,6 +1,5 @@
 package com.example.cineinfo.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,25 +17,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.cineinfo.data.findMovieById
+import coil.compose.AsyncImage
+import com.example.cineinfo.ui.movies.MoviesViewModel
 
 @Composable
-fun MovieDetailScreen(movieId: Int?, navController: NavController) {
-    val movie = findMovieById(movieId)
+fun MovieDetailScreen(movieId: Int?, navController: NavController, viewModel: MoviesViewModel? = null) {
+    val movie = if (movieId != null && viewModel != null) {
+        viewModel.getMovieById(movieId)
+    } else null
 
     if (movie == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = "Filme não encontrado.", color = Color.White)
+            Button(onClick = { navController.popBackStack() }) {
+                Text("Voltar")
+            }
         }
         return
     }
-
 
     Column(
         modifier = Modifier
@@ -49,8 +52,8 @@ fun MovieDetailScreen(movieId: Int?, navController: NavController) {
                 .fillMaxWidth()
                 .height(300.dp)
         ) {
-            Image(
-                painter = painterResource(id = movie.posterResId),
+            AsyncImage(
+                model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
                 contentDescription = "Poster do filme ${movie.title}",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.matchParentSize()
@@ -91,17 +94,11 @@ fun MovieDetailScreen(movieId: Int?, navController: NavController) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(movie.year.toString(), color = Color.LightGray, fontSize = 14.sp)
+                Text(movie.releaseDate?.take(4) ?: "", color = Color.LightGray, fontSize = 14.sp)
                 Spacer(Modifier.width(8.dp))
-                Text(movie.quality, color = Color.White, fontSize = 12.sp,
-                    modifier = Modifier
-                        .background(Color.DarkGray, RoundedCornerShape(4.dp))
-                        .padding(horizontal = 4.dp, vertical = 2.dp))
-                Spacer(Modifier.width(8.dp))
-                Text(movie.duration, color = Color.LightGray, fontSize = 14.sp)
-                Spacer(Modifier.width(8.dp))
+                
                 Text(
-                    text = "⭐ ${movie.rating}/10",
+                    text = "⭐ ${movie.voteAverage}/10",
                     fontSize = 16.sp,
                     color = Color(0xFFFFD700),
                     fontWeight = FontWeight.SemiBold
@@ -111,7 +108,7 @@ fun MovieDetailScreen(movieId: Int?, navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = movie.synopsis,
+                text = movie.overview,
                 fontSize = 16.sp,
                 lineHeight = 22.sp,
                 color = Color.LightGray,
